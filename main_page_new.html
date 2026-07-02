@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>iVideo — Главная</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #303030;
+      font-family: 'MiSans Latin', 'Inter', 'Segoe UI', system-ui, sans-serif;
+      color: #f0f0f0;
+      line-height: 1.5;
+      padding: 0 20px;
+    }
+
+    .app {
+      max-width: 1920px;
+      margin: 0 auto;
+      padding: 16px 0 40px;
+    }
+
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 20px;
+      padding: 12px 24px;
+      border-radius: 40px;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #fff;
+      letter-spacing: -0.5px;
+      white-space: nowrap;
+    }
+
+    .header-search {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 40px;
+      padding: 8px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .header-search svg {
+      flex-shrink: 0;
+      margin-right: 12px;
+      opacity: 0.6;
+    }
+
+    .header-search input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #eee;
+      font-size: 0.95rem;
+      width: 100%;
+    }
+
+    .header-search input::placeholder {
+      color: #aaa;
+    }
+
+    .header-upload {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 40px;
+      padding: 8px 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #eee;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .header-upload:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .main {
+      display: flex;
+      gap: 30px;
+    }
+
+    .sidebar {
+      flex: 0 0 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 16px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+    }
+
+    .sidebar a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.95rem;
+      padding: 10px 14px;
+      border-radius: 12px;
+      transition: background 0.2s, color 0.2s;
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid transparent;
+    }
+
+    .sidebar a:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .sidebar a.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .sidebar .spacer {
+      flex: 1;
+    }
+
+    .sidebar .help-btn {
+      display: block;
+      text-align: center;
+      background: linear-gradient(135deg, #00d4ff, #00bcd4);
+      color: #fff;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 4px 16px rgba(0, 212, 255, 0.3);
+      text-decoration: none;
+      margin-top: 12px;
+    }
+
+    .sidebar .help-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 212, 255, 0.5);
+    }
+
+    .content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 16px;
+      margin-bottom: 20px;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 60px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      width: fit-content;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: none;
+      color: #bbb;
+      font-size: 0.95rem;
+      cursor: pointer;
+      padding: 6px 14px;
+      border-radius: 40px;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .filter-btn.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin: 24px 0 16px;
+      color: #fff;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin: 10px 0 40px;
+    }
+
+    .video-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .hdr-label {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 165, 0, 0.25));
+      border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #ffd700;
+      text-align: center;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .thumb-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #222;
+    }
+
+    .thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .duration {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .video-info {
+      padding: 14px 16px 16px;
+    }
+
+    .video-title {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #f5f5f5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .video-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 12px;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+
+    .video-meta .channel {
+      color: #bbb;
+    }
+
+    .video-meta .views {
+      color: #999;
+    }
+
+    .banner {
+      margin: 30px 0 40px;
+      padding: 40px 30px;
+      border-radius: 32px;
+      color: #fff;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .banner h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .banner p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto 20px;
+    }
+
+    .banner .btn {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 12px 32px;
+      border-radius: 60px;
+      font-weight: 600;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      transition: all 0.3s;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .banner .btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.02);
+    }
+
+    .banner-production {
+      background: linear-gradient(135deg, rgba(247, 151, 30, 0.3), rgba(255, 210, 0, 0.3));
+      border-color: rgba(247, 151, 30, 0.3);
+    }
+
+    .banner-movie {
+      background: linear-gradient(135deg, rgba(74, 144, 226, 0.3), rgba(107, 91, 255, 0.3), rgba(168, 85, 247, 0.3));
+      border-color: rgba(107, 91, 255, 0.3);
+    }
+
+    .footer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 20px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-actions .btn-action {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 60px;
+      padding: 12px 32px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #eee;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .footer-actions .btn-action:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
+
+    .modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal-dialog {
+      background: rgba(20, 20, 28, 0.7);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 48px;
+      padding: 32px;
+      max-width: 600px;
+      width: 90%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      transform: scale(0.95);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.active .modal-dialog {
+      transform: scale(1);
+    }
+
+    .modal-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      text-align: center;
+      color: white;
+    }
+
+    .modal-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .modal-upload-btn {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 60px;
+      padding: 14px 20px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .modal-upload-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.02);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .modal-requirements {
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 24px;
+      padding: 16px;
+      margin-top: 16px;
+      font-size: 0.8rem;
+      color: #c0c0d8;
+      border-left: 3px solid #4b4bff;
+    }
+
+    .modal-requirements p {
+      margin: 8px 0;
+    }
+
+    .modal-close {
+      text-align: center;
+      margin-top: 20px;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .modal-close:hover {
+      color: white;
+    }
+
+    @media (max-width: 992px) {
+      .main {
+        flex-direction: column;
+      }
+      .sidebar {
+        flex: 0 0 auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        margin-bottom: 16px;
+        padding: 12px;
+        position: static;
+        height: auto;
+      }
+      .sidebar a {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+      }
+      .sidebar .spacer {
+        display: none;
+      }
+      .sidebar .help-btn {
+        margin-top: 0;
+        padding: 8px 16px;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px;
+      }
+      .header-search {
+        width: 100%;
+      }
+      .header-upload {
+        align-self: flex-start;
+      }
+      .video-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 16px;
+      }
+      .banner {
+        padding: 30px 20px;
+      }
+      .banner h2 {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <header class="header">
+    <div class="logo">iVideo</div>
+    <div class="header-search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Поиск видео, Shorts, аудио, трансляций...">
+    </div>
+    <button class="header-upload" id="uploadHeaderBtn">Загрузить</button>
+  </header>
+
+  <div class="main">
+    <nav class="sidebar">
+      <a href="#" class="active">Главная</a>
+      <a href="https://3.ntv.ru/public/files/51746313/video_page.html">Видео</a>
+      <a href="https://3.ntv.ru/public/files/51746313/shorts.html">Shorts</a>
+      <a href="https://3.ntv.ru/public/files/51746313/playlist.html">Плейлисты</a>
+      <a href="https://3.ntv.ru/public/files/51746313/production.html">Передачи собственного производства</a>
+      <a href="https://3.ntv.ru/public/files/51746313/movies.html">Смотри кино на iVideo</a>
+      <a href="#">Подкасты</a>
+      <a href="#">Трансляции</a>
+      <a href="#">Эксклюзивы</a>
+      <div class="spacer"></div>
+      <a href="https://3.ntv.ru/public/files/51746313/spravka.html" class="help-btn">🛟 Справочная служба</a>
+    </nav>
+
+    <div class="content">
+      <div class="filters">
+        <button class="filter-btn active">Видео</button>
+        <button class="filter-btn">Аудио</button>
+        <button class="filter-btn">Shorts</button>
+        <button class="filter-btn">Трансляции</button>
+      </div>
+
+      <h2 class="section-title">Новые видео</h2>
+
+      <div class="video-grid" id="videoGrid"></div>
+
+      <div class="banner banner-production">
+        <h2>📺 Передачи собственного производства</h2>
+        <p>Уникальные проекты, созданные нашей командой. Только у нас — эксклюзивный контент.</p>
+        <a href="#" class="btn">Смотреть</a>
+      </div>
+
+      <div class="banner banner-movie">
+        <h2>🎬 Смотри кино на iVideo</h2>
+        <p>Огромная коллекция фильмов и сериалов в высоком качестве. Эксклюзивные премьеры каждый месяц.</p>
+        <a href="#" class="btn">Перейти к фильмам</a>
+      </div>
+
+      <div class="footer-actions">
+        <a href="https://3.ntv.ru/public/files/51746313/channels.html" class="btn-action">📺 Каналы</a>
+        <a href="https://3.ntv.ru/public/files/51746313/lenta_postov.html" class="btn-action">📝 Записи</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="uploadModal">
+  <div class="modal-dialog">
+    <div class="modal-title">Загрузка</div>
+    <div class="modal-buttons">
+      <button class="modal-upload-btn" data-type="shorts">📱 Загрузить Shorts</button>
+      <button class="modal-upload-btn" data-type="video">🎬 Загрузить видео</button>
+      <button class="modal-upload-btn" data-type="podcast">🎙 Загрузить подкаст</button>
+    </div>
+    <div class="modal-requirements" id="requirementsText"></div>
+    <div class="modal-close" id="closeModal">✕ Закрыть</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const videos = [
+      { thumb: 'https://3.ntv.ru/public/files/79327122/_snapshot_44.11.100.webp', duration: '57:20', title: 'Сумасшедшое телевидение - Выпуск 1', channel: 'ФуджиКОММЕТ', views: 'error', url: 'https://3.ntv.ru/public/files/79327122/symastv1.html' },
+      { thumb: 'https://3.ntv.ru/public/files/79327122/_snapshot_00.17.12.870.webp', duration: '1:02:42', title: 'Сумасшедшое телевидение - Выпуск 2', channel: 'ФуджиКОММЕТ', views: 'error', url: 'https://3.ntv.ru/public/files/79327122/symastv2_web.html' },
+      { thumb: 'https://3.ntv.ru/public/files/35893218/_snapshot_00.52.07.299.webp', duration: '1:07:48', title: 'Сумасшедшое телевидение: выпуск 3', channel: 'ФуджиКОММЕТ', views: '?', url: 'https://3.ntv.ru/public/files/35893218/symastv3.html' },
+      { thumb: 'https://3.ntv.ru/public/files/84714890/maxresdefault%20(2).webp', duration: '11:10', title: 'Я Поменял ЖИЗНЬ за 1 ГОД после ПОТЕРИ ВСЕХ ДЕНЕГ и ДРУЗЕЙ...', channel: 'ivideo_error_channel', views: 'error_view', url: 'https://3.ntv.ru/public/files/13301643/ruda_video_26052026_2.html' },
+      { thumb: 'https://3.ntv.ru/public/files/33775316/Факты ICTV 4.07.2015 12_45_432p.mp4_snapshot_00.44.866.webp', duration: '14:20', title: 'Факты ICTV - 4 июля 2015 / 12:45', channel: 'invalid_channel', views: 'error.', url: 'https://3.ntv.ru/public/files/33775316/fakty040715.html' },
+      { thumb: 'https://3.ntv.ru/public/files/81254960/_snapshot_00.09.109.webp', duration: '1:29:56', title: 'Debata Gozdyry - 05.06.2026', channel: 'invalid', views: '?', url: 'https://3.ntv.ru/public/files/81254960/debata_gozdyry_050626.html' },
+      { thumb: 'https://3.ntv.ru/public/files/19924712/fudvikommet_player.png', duration: '18:38', title: 'Архив ФуджиКОММЕТ / 21 сентября 2024', channel: 'ФуджиКОММЕТ', views: '?', url: 'https://3.ntv.ru/public/files/16209921/fudvikommet_archive_21092024.html' },
+      { thumb: 'https://3.ntv.ru/public/files/43874930/_snapshot_01.57.297.webp', duration: '3:25', title: 'Наталья Подольская - Не Бояться (LIVE @ Авторадио)', channel: 'invalid', views: '?', url: 'https://3.ntv.ru/public/files/43874930/avtoradio_Nataliya%20Podoloslkaya_Ne_Boyatsya_Ultra HD.html' },
+      { thumb: 'https://3.ntv.ru/public/files/51746313/_snapshot_00.01.160.webp', duration: '1:55', title: 'Начальный шпигель Вести (2019-н.в)', channel: 'invalid', views: '?', url: 'https://3.ntv.ru/public/files/98285119/vesti_110823.html' },
+      { thumb: 'https://3.ntv.ru/public/files/81984101/_snapshot_01.33.831.webp', duration: '14:33', title: 'Факты 29.12.2006', channel: 'invalid', views: '?', url: 'https://3.ntv.ru/public/files/81984101/fakty291206.html' },
+      { thumb: 'https://3.ntv.ru/public/files/95890346/_snapshot_00.10.522.webp', duration: '1:13', title: 'Странный инцидент в эфире "Карусель" | 13.04.2012', channel: 'invalid', views: '?', url: 'https://3.ntv.ru/public/files/95890346/carousel130412.html' },
+      { thumb: 'https://3.ntv.ru/public/files/57322929/_snapshot_00.10.953.webp', duration: '12:58', title: 'Разбор мемов 4', channel: 'ФуджиКОММЕТ', views: '?', url: 'https://3.ntv.ru/public/files/57322929/razbormemov4.html' },
+      { thumb: 'https://3.ntv.ru/public/files/12647390/_snapshot_00.12.276.webp', duration: '12:41', title: 'Факты 18.09.2003 12:45', channel: 'invalid', views: '?', url: 'https://3.ntv.ru/public/files/12647390/fakty180903.html' },
+      { thumb: 'https://3.ntv.ru/public/files/93614409/main_image_451711062417.webp', duration: '2:39', title: 'Миколина погода на 27 січня. Ранок у великому місті - ПРОГНОЗ ПОГОДИ - МИКОЛА ЛУЦЕНКО', channel: 'invalid', views: '?', url: 'https://3.ntv.ru/public/files/93614409/mykpog270126.html' },
+      { thumb: 'https://3.ntv.ru/public/files/73774174/720_467414065222.webp', duration: '44:51', title: 'Галопам по Европам / 27 июля 2008', channel: 'Галопам по Европам / 3 сеозн', views: '?', url: 'https://3.ntv.ru/public/files/73774174/gpoeu270708.html' },
+      { thumb: 'https://3.ntv.ru/public/files/12647390/_snapshot_00.12.276.webp', duration: '18:04', title: 'Спецвыпуск Фактов / 2004 г.', channel: 'Архив Фактов', views: '?', url: 'https://3.ntv.ru/public/files/89036946/fakty2004.html' },
+      { thumb: 'https://3.ntv.ru/public/files/62702448/main_image_14.webp', duration: '1:25:57', title: 'Фиксики против кработов', channel: 'invalid', views: '?', url: 'https://3.ntv.ru/public/files/62702448/krabotov.html' },
+      { thumb: 'https://3.ntv.ru/public/files/77278301/1080_471117065410.webp', duration: '1:51:56', title: 'Комната страха.', channel: 'iVideo Фильмы', views: '?', url: 'https://3.ntv.ru/public/files/77278301/panicroom.html' },
+      { thumb: 'https://3.ntv.ru/public/files/64211968/maxresdefault.webp', duration: '1:56:09', title: 'СТРИМ - РАЗДАЧА ДОНАТА на СЕРВЕРЕ OreMine в Майнкрафт', channel: 'streams_record', views: '?', url: 'https://3.ntv.ru/public/files/64211968/ruda050626.html' },
+      { thumb: 'https://3.ntv.ru/public/files/80370648/1080_469422067400.webp', duration: '18:32', title: 'В понедельник дойдет до Лукашенко! / Написала более 60 ложных доносов на бывшего мужа! | Что не могли поделить супруги? | Про измены и обращение к Лукашенко в TikTok.', channel: 'videobel', views: '?', url: 'https://3.ntv.ru/public/files/80370648/luka4.html' },
+      { thumb: 'https://3.ntv.ru/public/files/92829670/_snapshot_03.03.600.webp', duration: '47:11', title: '😨 ТЕЛЕФОН, КОТОРЫЙ ШЕПЧЕТ ИМЕНА МЁРТВЫХ... ｜ СЛЕПАЯ', channel: 'СЛЕПАЯ', views: '?', url: 'https://3.ntv.ru/public/files/92829670/slepaya1342.html' },
+      { thumb: 'https://3.ntv.ru/public/files/24571166/Du481sOHopU_maxres.webp', duration: '2:46', title: 'Фильм «Форсаж 1» (2025) | Трейлер 4K HDR 2 🎞 Video Enhance Studio AI 1.7.5', channel: 'Трейлеры HDR', views: '?', url: 'https://3.ntv.ru/public/files/24571166/f1trailer.html', isHdr: true },
+      { thumb: 'https://3.ntv.ru/public/files/66227233/_snapshot_00.24.51.750.webp', duration: '1:04:26', title: 'Сумасшедшое телевидение: выпуск 4', channel: 'ФуджиКОММЕТ', views: '?', url: 'https://3.ntv.ru/public/files/66227233/symastv4.html' },
+      { thumb: 'https://3.ntv.ru/public/files/84835216/1080_478027062150.webp', duration: '3:29', title: 'Наталья Подольская — Не бояться (official audio)', channel: 'iVideo Музыка', views: '?', url: 'https://3.ntv.ru/public/files/84835216/neboyatsya.html' },
+      { thumb: 'https://3.ntv.ru/public/files/61017860/_snapshot_00.00.18.665.webp', duration: '1:35:08', title: 'Гадалка: сборник', channel: 'Гадалка', views: '?', url: 'https://3.ntv.ru/public/files/61017860/gadalka874.html' },
+      { thumb: 'https://3.ntv.ru/public/files/27565754/_snapshot_00.00.26.254.webp', duration: '1:13:04', title: 'ПРАЗДНУЕМ МОЙ ДЕНЬ РОЖДЕНИЯ!!!', channel: 'reupload_twitch', views: '?', url: 'https://3.ntv.ru/public/files/27565754/vanya200m010726.html' }
+    ];
+
+    const grid = document.getElementById('videoGrid');
+
+    function renderVideos() {
+      let html = '';
+      videos.forEach(v => {
+        const hdrLabel = v.isHdr ? '<div class="hdr-label">🎞️ Смотрите и в HDR</div>' : '';
+        html += `
+          <div class="video-card" onclick="location.href='${v.url}'">
+            ${hdrLabel}
+            <div class="thumb-wrap">
+              <img src="${v.thumb}" alt="${v.title}" loading="lazy">
+              <span class="duration">${v.duration}</span>
+            </div>
+            <div class="video-info">
+              <div class="video-title">${v.title}</div>
+              <div class="video-meta">
+                <span class="channel">@${v.channel}</span>
+                <span class="views">${v.views} просмотров</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
+    }
+
+    renderVideos();
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    const modal = document.getElementById('uploadModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const requirementsDiv = document.getElementById('requirementsText');
+
+    const requirementsMap = {
+      shorts: `<p><strong>📱 Требования для Shorts:</strong><br>До 4 минут длиной, макс. разрешение 2160x3840, соотношение сторон видео 9:16, кодек H.264/AVC | H.265/HEVC | VP9 | VP8 | AV1 | APV | VC-1 (WMV9), аудиокодек не важен, размер файла: до 5 ГБ.</p><p>После загрузки ваше видео будет переконвертировано в формат HLS для удобного просмотра.</p>`,
+      video: `<p><strong>🎬 Требования для видео:</strong><br>Длина не ограничена (ограничена макс. кол-вом сегментов), макс. разрешение 7680x4320, соотношение сторон любое, кодек H.264/AVC | H.265/HEVC | VP9 | VP8 | AV1 | APV | VC-1 (WMV9), аудиокодек не важен, размер файла: до 384 ГБ.</p><p>После загрузки ваше видео будет переконвертировано в формат HLS для удобного просмотра.</p>`,
+      podcast: `<p><strong>🎙 Требования для подкаста:</strong><br>Длина аудио не ограничена (ограничена макс. кол-вом сегментов), битрейт не ограничен, кодек AAC-LC/HE-AAC/HE-AACv2/PCM/Opus/Vorbis/FLAC/AMR-NB/AMR-WB/MP2/MP3, макс. кол-во бит 24, макс. частота дискретизации 48 КГц, размер файла: до 384 ГБ.</p><p>После загрузки ваше аудио будет переконвертировано в формат HLS для удобного прослушивания.</p>`
+    };
+
+    function showModal() {
+      modal.classList.add('active');
+      requirementsDiv.innerHTML = requirementsMap.video;
+    }
+
+    function hideModal() {
+      modal.classList.remove('active');
+    }
+
+    document.getElementById('uploadHeaderBtn').addEventListener('click', showModal);
+
+    document.querySelectorAll('.modal-upload-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const type = this.dataset.type;
+        if (type === 'shorts') requirementsDiv.innerHTML = requirementsMap.shorts;
+        else if (type === 'video') requirementsDiv.innerHTML = requirementsMap.video;
+        else if (type === 'podcast') requirementsDiv.innerHTML = requirementsMap.podcast;
+        window.location.href = 'https://3.ntv.ru/upload';
+      });
+    });
+
+    closeModalBtn.addEventListener('click', hideModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) hideModal();
+    });
+
+  })();
+</script>
+
+</body>
+</html>
